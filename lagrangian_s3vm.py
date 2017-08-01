@@ -9,7 +9,7 @@ def lagrangian_s3vm_train(xtrain_l,
                           ytrain_l,
                           xtrain_u,
                           svc,
-                          r=0.5,
+                          r=.5,
                           batch_size=2000,
                           annealing_sequence=[0.1, 0.25, 0.5, 1.0],
                           rdm=np.random.RandomState()):
@@ -28,7 +28,7 @@ def lagrangian_s3vm_train(xtrain_l,
     beta = min(u, batch_size - l)*(2*r - 1)#constant term
     for factor in annealing_sequence:
         #sample: shuffle + slice
-        xtrain_u = skutils.shuffle(xtrain_u)
+        xtrain_u = skutils.shuffle(xtrain_u, random_state=rdm)
         u_batch = xtrain_u[:batch_size - l] if xtrain_u.shape[0] >= batch_size - l else xtrain_u
         #compute labels on the batch
         y_u = lagrangian_heuristic(svc.decision_function(u_batch),
